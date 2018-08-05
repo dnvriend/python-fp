@@ -1,5 +1,6 @@
 from fp.list import List
 from fp.option import Option
+from fp import *
 
 
 def test_list_is_empty():
@@ -102,3 +103,14 @@ def test_partition_list_not_satisfy():
 
 def test_sort_list():
     assert List(3, 2, 1).sorted().unwrap() == [1, 2, 3]
+
+
+def test_nel_empty():
+    assert List().nel().is_empty()
+    assert List().nel().fold(List(), identity).unwrap() == []
+
+
+def test_nel_non_empty():
+    assert not List(1, 2, 3).nel()\
+                   .fold(List(), identity)\
+                   .unwrap() == [1, 2, 3]

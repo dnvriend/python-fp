@@ -104,6 +104,13 @@ class List(Generic[A]):
 
         return List.from_list(xs), List.from_list(ys)
 
+    def nel(self) -> Option[List[A]]:
+        """If the List is empty, return an Option.empty else an Option(List[A])"""
+        if self.is_empty():
+            return Option.empty()
+        else:
+            return Option(List(self.xs))
+
     def sorted(self) -> List[A]:
         return List(*sorted(self.xs))
 
