@@ -11,6 +11,14 @@ class Option(Generic[A]):
     def __init__(self, opt: Optional[A]):
         self.opt: Optional[A] = opt
 
+    @classmethod
+    def empty(cls) -> Option[A]:
+        return Option(None)
+
+    @classmethod
+    def some(cls, x: A) -> Option[A]:
+        return Option(x)
+
     def map(self, f: Callable[[A], B]) -> Option[B]:
         if self.is_defined():
             return Option(f(self.opt))
