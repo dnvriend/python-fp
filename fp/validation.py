@@ -30,6 +30,13 @@ class Validation(Generic[Err, A]):
             return Failure(err)
 
     @classmethod
+    def from_try_catch(cls, f: Callable[[], A]) -> Validation[Err, A]:
+        try:
+            return Validation.success(f())
+        except Exception as err:
+            return Validation.failure(err)
+
+    @classmethod
     def success(cls, x: A) -> Validation[Err, A]:
         return Success(x)
 

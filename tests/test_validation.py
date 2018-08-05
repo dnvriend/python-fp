@@ -88,3 +88,10 @@ def test_bind_validation_failure():
             .bind(lambda x: Validation.success(x + 1))\
             .bind(lambda x: Validation.success(x + 1))\
             .fold(identity, identity) == 'err'
+
+
+def test_validation_from_try_catch_with_div_by_zero():
+    res = Validation.from_try_catch(lambda: 1 / 0)
+    assert res.is_failure()
+    assert res.fold(lambda err: str(err),
+                    lambda x: str(x)) == 'division by zero'
