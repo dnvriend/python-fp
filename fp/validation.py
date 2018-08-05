@@ -71,7 +71,12 @@ class Validation(Generic[Err, A]):
             return f(self.value)
 
     def is_failure(self) -> bool:
+        """Returns true if the Validation is an Failure"""
         return self.failure
+
+    def is_success(self) -> bool:
+        """Returns true if the Validation is a Success"""
+        return not self.failure
 
     def fold(self, f: Callable[[Err], C], g: Callable[[A], C]) -> C:
         if self.is_failure():
