@@ -18,16 +18,16 @@ class Validation(Generic[Err, A]):
     @classmethod
     def from_option(cls, opt: Option[A], err: Err) -> Validation[Err, A]:
         if opt.is_defined():
-            return Success(opt.get())
+            return Validation.success(opt.get())
         else:
-            return Failure(err)
+            return Validation.failure(err)
 
     @classmethod
     def from_optional(cls, opt: Optional[A], err: Err) -> Validation[Err, A]:
         if opt:
-            return Success(opt)
+            return Validation.success(opt)
         else:
-            return Failure(err)
+            return Validation.failure(err)
 
     @classmethod
     def from_try_catch(cls, f: Callable[[], A]) -> Validation[Err, A]:
@@ -53,16 +53,16 @@ class Validation(Generic[Err, A]):
         err, succ = xs.partition(lambda x: x.is_failure())
         if err.is_empty():
             xs = succ.map(lambda x: x.get())
-            return Success(xs)
+            return Validation.success(xs)
         else:
             xs = err.map(lambda x: x.get())
-            return Failure(xs)
+            return Validation.failure(xs)
 
     def map(self, f: Callable[[A], C]) -> Validation[C]:
         if self.is_failure():
             return self
         else:
-            return Success(f(self.value))
+            return Validation.success(f(self.value))
 
     def bind(self, f: Callable[[A], Validation[C]]) -> Validation[C]:
         if self.is_failure():
