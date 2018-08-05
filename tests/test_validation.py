@@ -54,3 +54,29 @@ def test_validation_example():
     assert Validation.sequence(List(fn, ln, age, zip)) \
         .fold(identity, identity) \
         .unwrap() == ['first name is empty', 'last name is empty', 'age is empty', 'zipcode is empty']
+
+
+def test_map_validation_success():
+    assert Validation.success(1)\
+               .map(identity).get() == 1
+
+
+def test_map_validation_failure():
+    assert Validation.failure('err')\
+               .map(identity).get() == 'err'
+
+
+def test_bind_validation_success():
+    assert Validation.success(1)\
+               .bind(lambda x: Validation.success(x + 1))\
+               .bind(lambda x: Validation.success(x + 1))\
+               .bind(lambda x: Validation.success(x + 1))\
+               .fold(identity, identity) == 4
+
+
+def test_bind_validation_failure():
+    assert Validation.failure('err')\
+            .bind(lambda x: Validation.success(x + 1))\
+            .bind(lambda x: Validation.success(x + 1))\
+            .bind(lambda x: Validation.success(x + 1))\
+            .fold(identity, identity) == 'err'
