@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic, Callable, Union
+from typing import TypeVar, Generic, Callable, Union, Optional
 
 from fp.list import List
 from fp.option import Option
@@ -19,6 +19,13 @@ class Validation(Generic[Err, A]):
     def from_option(cls, opt: Option[A], err: Err) -> Validation[Err, A]:
         if opt.is_defined():
             return Success(opt.get())
+        else:
+            return Failure(err)
+
+    @classmethod
+    def from_optional(cls, opt: Optional[A], err: Err) -> Validation[Err, A]:
+        if opt:
+            return Success(opt)
         else:
             return Failure(err)
 

@@ -12,6 +12,14 @@ def test_create_validation_from_option_non_empty():
     assert not Validation.from_option(Option.some(1), 'err').is_failure()
 
 
+def test_create_validation_from_optional_empty():
+    assert Validation.from_optional(None, 'err').is_failure()
+
+
+def tes_create_validation_from_optional_non_empty():
+    assert Validation.from_optional(1, 'err').is_failure()
+
+
 def test_fold_from_option_empty():
     assert Validation \
                .from_option(Option.empty(), 'my error message') \
