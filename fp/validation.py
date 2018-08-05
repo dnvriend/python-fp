@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic, Callable, List as PList, Optional, Tuple, Union
-from fp.option import Option
+from typing import TypeVar, Generic, Callable, Union
+
 from fp.list import List
+from fp.option import Option
 
 A = TypeVar('A')
 Err = TypeVar('Err')
