@@ -1,4 +1,5 @@
 from fp.list import List
+from fp.option import Option
 
 
 def test_list_is_empty():
@@ -57,3 +58,47 @@ def test_list_find():
     assert List(1, 2, 3) \
                .find(lambda x: x == 2) \
                .get_or_else(0) == 2
+
+
+def test_list_reverse():
+    assert List(1, 2, 3).reverse().unwrap() == [3, 2, 1]
+
+
+def test_from_optional_none():
+    assert List.from_optional(None).is_empty()
+
+
+def test_from_optional_value():
+    assert not List.from_optional(1).is_empty()
+
+
+def test_from_option_none():
+    assert List.from_option(Option(None)).is_empty()
+
+
+def test_from_option_value():
+    assert not List.from_option(Option(1)).is_empty()
+
+
+def test_from_empty_list():
+    assert List.from_list([]).is_empty()
+
+
+def test_from_non_empty_list():
+    assert not List.from_list([1, 2, 3]).is_empty()
+
+
+def test_partition_list_satisfy():
+    xs, ys = List(1, 2, 3, 4).partition(lambda x: x <= 2)
+    assert xs.unwrap() == [1, 2]
+    assert ys.unwrap() == [3, 4]
+
+
+def test_partition_list_not_satisfy():
+    xs, ys = List(1, 2, 3, 4).partition(lambda x: x >= 3)
+    assert xs.unwrap() == [3, 4]
+    assert ys.unwrap() == [1, 2]
+
+
+def test_sort_list():
+    assert List(3, 2, 1).sorted().unwrap() == [1, 2, 3]

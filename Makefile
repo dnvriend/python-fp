@@ -19,7 +19,7 @@ run_test:
 
 fmt:        ## runs code formatter
 	#pipenv run yapf --style pep8 --recursive --in-place rules tests
-	pipenv run yapf --recursive --in-place fp
+	pipenv run yapf --recursive --in-place fp tests
 
 type_check:  ## type checks the code
 	pipenv run mypy --ignore-missing-imports fp

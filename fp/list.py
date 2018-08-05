@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic, Callable
+from typing import TypeVar, Generic, Callable, List as PList, Optional, Tuple
 from fp.option import Option
 
 A = TypeVar('A')
@@ -11,6 +11,18 @@ class List(Generic[A]):
 
     def __init__(self, *xs: A):
         self.xs = list(xs)
+
+    @classmethod
+    def from_list(cls, xs: PList[A]) -> List[A]:
+        return List(*xs)
+
+    @classmethod
+    def from_optional(cls, x: Optional[A]) -> List[A]:
+        return List.from_option(Option(x))
+
+    @classmethod
+    def from_option(cls, x: Option[A]) -> List[A]:
+        return x.fold(List(), lambda y: List(y))
 
     def map(self, f: Callable[[A], B]) -> List[B]:
         return List(*[f(x) for x in self.xs])
@@ -66,7 +78,7 @@ class List(Generic[A]):
         return accum
 
     def find(self, f: Callable[[A], bool]) -> Option[A]:
-        """Returns the first value that matches the predicate"""
+        """Returns the first value that satisfy the predicate"""
         return self.filter(f).head_option()
 
     def head_option(self) -> Option[A]:
@@ -75,6 +87,25 @@ class List(Generic[A]):
             return Option(None)
         else:
             return Option(self.xs[0])
+
+    def partition(self, f: Callable[[A], bool]) -> Tuple[List[A], List[A]]:
+        """
+        Partitions the List into two Lists returned as a Tuple. The first List
+        contains all elements that satisfy the predicate, the second List contains
+        all element that does not satisfy the predicate.
+        """
+        xs: PList[A] = []
+        ys: PList[A] = []
+        for x in self.xs:
+            if f(x):
+                xs.append(x)
+            else:
+                ys.append(x)
+
+        return List.from_list(xs), List.from_list(ys)
+
+    def sorted(self) -> List[A]:
+        return List(*sorted(self.xs))
 
     def reverse(self) -> List[A]:
         return List(*reversed(self.xs))
