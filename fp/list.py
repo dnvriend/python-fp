@@ -40,12 +40,12 @@ class List(Generic[A]):
             ys += f(x).unwrap()
         return List(*ys)
 
-    def for_each(self, f: Callable[[A], None]) -> None:
+    def foreach(self, f: Callable[[A], None]) -> None:
         [f(x) for x in self.xs]
         return None
 
     def filter(self, f: Callable[[A], bool]) -> List[A]:
-        return List(*[x for x in self.xs if f(x)])
+        return List.from_list(list(filter(f, self.xs)))
 
     def is_empty(self) -> bool:
         return len(self.xs) == 0

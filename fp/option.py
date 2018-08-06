@@ -31,7 +31,7 @@ class Option(Generic[A]):
         else:
             return self
 
-    def for_each(self, f: Callable[[A], None]) -> None:
+    def foreach(self, f: Callable[[A], None]) -> None:
         [f(x) for x in list(self.opt)]
         return None
 
