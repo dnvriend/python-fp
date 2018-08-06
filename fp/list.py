@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TypeVar, Generic, Callable, List as PList, Optional, Tuple
 from fp.option import Option
+from fp.monoid import Monoid, StringMonoid
 
 A = TypeVar('A')
 B = TypeVar('B')
@@ -25,9 +26,15 @@ class List(Generic[A]):
         return x.fold(List(), lambda y: List(y))
 
     def map(self, f: Callable[[A], B]) -> List[B]:
+        """Converts any element of the list from A to B ie. F[A] -> F[B]"""
         return List(*[f(x) for x in self.xs])
 
+    def fold_map(self, m: Monoid[B], f: Callable[[A], B]) -> B:
+        """First 'map' each element of the List to B, and then 'fold' the List to B according to the Monoid[B]"""
+        return self.map(f).fold(m.zero(), m.append)
+
     def bind(self, f: Callable[[A], List[B]]) -> List[B]:
+        """Natural Transformation of an endofunctor ie. F[F[A]] -> F[A]"""
         ys: List[B] = []
         for x in self.xs:
             ys += f(x).unwrap()
@@ -46,9 +53,10 @@ class List(Generic[A]):
     def mk_string(self, sep: str = '') -> str:
         return self.map(lambda x: str(x)) \
             .intersperse(sep) \
-            .fold('', lambda x, y: x + y)
+            .foldl(StringMonoid())
 
     def intersperse(self, y: A) -> List[A]:
+        """Intersperse the list with a value 'y'"""
 
         def iterator():
             it = iter(self.xs)
@@ -76,6 +84,14 @@ class List(Generic[A]):
         for x in self.xs:
             accum = f(accum, x)
         return accum
+
+    def foldl(self, m: Monoid[A]) -> A:
+        """Catamorphism to A, from left to right with Monoid[A]"""
+        return self.fold_left(m.zero(), m.append)
+
+    def foldr(self, m: Monoid[A]) -> A:
+        """Catamorphism to A, from right to left with Monoid[A]"""
+        return self.fold_right(m.zero(), m.append)
 
     def find(self, f: Callable[[A], bool]) -> Option[A]:
         """Returns the first value that satisfy the predicate"""

@@ -21,3 +21,12 @@ class StringMonoid(Monoid[str]):
 
     def append(self, l: str, r: str) -> str:
         return l + r
+
+
+class IntMonoid(Monoid[int]):
+
+    def zero(self) -> int:
+        return 0
+
+    def append(self, l: int, r: int) -> int:
+        return l + r

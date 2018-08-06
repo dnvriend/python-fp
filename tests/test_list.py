@@ -1,5 +1,6 @@
 from fp.list import List
 from fp.option import Option
+from fp.monoid import IntMonoid, StringMonoid
 from fp import *
 
 
@@ -107,10 +108,34 @@ def test_sort_list():
 
 def test_nel_empty():
     assert List().nel().is_empty()
-    assert List().nel().fold(List(), identity).unwrap() == []
+    assert List().nel().fold(List(5, 4, 3), identity).unwrap() == [5, 4, 3]
 
 
 def test_nel_non_empty():
     assert not List(1, 2, 3).nel()\
                    .fold(List(), identity)\
                    .unwrap() == [1, 2, 3]
+
+
+def test_fold_map_on_list_of_int():
+    assert List(1, 2, 3).fold_map(IntMonoid(), identity) == 6
+
+
+def test_fold_map_on_list_of_string():
+    assert List('a', 'b', 'c').fold_map(StringMonoid(), identity) == 'abc'
+
+
+def test_foldl_on_list_of_int():
+    assert List(1, 2, 3).foldl(IntMonoid()) == 6
+
+
+def test_foldl_on_list_of_string():
+    assert List('a', 'b', 'c').foldl(StringMonoid()) == 'abc'
+
+
+def test_foldr_on_list_of_int():
+    assert List(1, 2, 3).foldr(IntMonoid()) == 6
+
+
+def test_foldr_on_list_of_string():
+    assert List('a', 'b', 'c').foldr(StringMonoid()) == 'cba'
