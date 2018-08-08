@@ -1,19 +1,28 @@
 from __future__ import annotations
 
 from typing import TypeVar, Generic, Callable, Union, Optional
-
+from dataclasses import dataclass
 from fp.list import List
-from fp.option import Option
 
 A = TypeVar('A')
 Err = TypeVar('Err')
 C = TypeVar('C')
 
 
+@dataclass
 class Validation(Generic[Err, A]):
-    failure: bool = False
-    err_value: Err = None
-    value: A = None
+
+    @classmethod
+    def parse_int(cls, s: str) -> Validation[Err, int]:
+        return Validation.from_try_catch(lambda: int(s))
+
+    @classmethod
+    def parse_float(cls, s: str) -> Validation[Err, float]:
+        return Validation.from_try_catch(lambda: float(s))
+
+    @classmethod
+    def parse_boolean(cls, s: str):
+        return Validation.from_try_catch(lambda: bool(s))
 
     @classmethod
     def from_option(cls, opt: Option[A], err: Err) -> Validation[Err, A]:
@@ -72,16 +81,24 @@ class Validation(Generic[Err, A]):
 
     def is_failure(self) -> bool:
         """Returns true if the Validation is an Failure"""
+        print(f"is_failure: {self.failure}")
         return self.failure
 
     def is_success(self) -> bool:
         """Returns true if the Validation is a Success"""
+        print(f"is_success: {self.success}")
         return not self.failure
 
     def fold(self, f: Callable[[Err], C], g: Callable[[A], C]) -> C:
         if self.is_failure():
+            print(
+                f"fold the error side: failure={self.is_failure()} -> err_value={self.err_value}"
+            )
             return f(self.err_value)
         else:
+            print(
+                f"fold the success side: failure={self.is_failure()} -> value={self.value}"
+            )
             return g(self.value)
 
     def get(self) -> Union[Err, A]:
@@ -91,23 +108,15 @@ class Validation(Generic[Err, A]):
             return self.value
 
 
+@dataclass()
 class Success(Validation):
-
-    def __init__(self, x: A):
-        self.failure = False
-        self.success = True
-        self.value = x
-
-    def __str__(self):
-        return f"Success({self.value})"
+    value: A
+    failure: bool = False
+    success: bool = True
 
 
+@dataclass()
 class Failure(Validation):
-
-    def __init__(self, x: Err):
-        self.failure = True
-        self.success = False
-        self.err_value = x
-
-    def __str__(self):
-        return f"Failure({self.err_value})"
+    err_value: Err
+    failure: bool = True
+    success: bool = False

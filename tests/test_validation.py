@@ -16,8 +16,8 @@ def test_create_validation_from_optional_empty():
     assert Validation.from_optional(None, 'err').is_failure()
 
 
-def tes_create_validation_from_optional_non_empty():
-    assert Validation.from_optional(1, 'err').is_failure()
+def test_create_validation_from_optional_non_empty():
+    assert not Validation.from_optional(1, 'err').is_failure()
 
 
 def test_fold_from_option_empty():
@@ -95,3 +95,26 @@ def test_validation_from_try_catch_with_div_by_zero():
     assert res.is_failure()
     assert res.fold(lambda err: str(err),
                     lambda x: str(x)) == 'division by zero'
+
+
+def test_parse_int_failure():
+    assert Validation.parse_int('a').is_failure()
+
+
+def test_parse_int_success():
+    assert Validation.parse_int(1).is_success()
+
+
+def test_parse_float_failure():
+    assert Validation.parse_float('a').is_failure()
+
+
+def test_parse_float_success():
+    assert Validation.parse_float('1.0').is_success()
+
+
+def test_parse_bool_success():
+    assert Validation.parse_boolean('').is_success()
+    assert Validation.parse_boolean('a').is_success()
+    assert Validation.parse_boolean('0').is_success()
+    assert Validation.parse_boolean('1').is_success()
