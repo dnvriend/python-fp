@@ -143,5 +143,5 @@ class List(Generic[A]):
         """Returns the underlying list"""
         return self.xs
 
-    def __str__(self):
+    def __repr__(self):
         return f'List({self.xs})'
