@@ -22,6 +22,9 @@ class StringMonoid(Monoid[str]):
     def append(self, l: str, r: str) -> str:
         return l + r
 
+    def __repr__(self) -> str:
+        return 'StringMonoid'
+
 
 class IntMonoid(Monoid[int]):
 
@@ -30,3 +33,6 @@ class IntMonoid(Monoid[int]):
 
     def append(self, l: int, r: int) -> int:
         return l + r
+
+    def __repr__(self) -> str:
+        return 'IntMonoid'

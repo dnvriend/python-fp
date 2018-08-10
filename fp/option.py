@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 from typing import TypeVar, Callable, Optional, Generic
-from dataclasses import dataclass
 
 A = TypeVar('A')
 B = TypeVar('B')
 Err = TypeVar('Err')
 
 
-@dataclass
 class Option(Generic[A]):
-    opt: Optional[A]
+
+    def __init__(self, opt: Optional[A]):
+        self.opt = opt
 
     @classmethod
     def empty(cls) -> Option[A]:
@@ -80,3 +80,12 @@ class Option(Generic[A]):
     def is_defined(self) -> bool:
         """Returns true of the Option contains a value"""
         return self.opt is not None
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Option):
+            return self.opt == other.opt
+        else:
+            return False
+
+    def __repr__(self) -> str:
+        return f'Option({self.opt})'

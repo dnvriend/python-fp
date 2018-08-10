@@ -25,6 +25,10 @@ class List(Generic[A]):
     def from_option(cls, x: Option[A]) -> List[A]:
         return x.fold(List(), lambda y: List(y))
 
+    @classmethod
+    def empty(cls) -> List[A]:
+        return List()
+
     def map(self, f: Callable[[A], B]) -> List[B]:
         """Converts any element of the list from A to B ie. F[A] -> F[B]"""
         return List(*[f(x) for x in self.xs])
@@ -51,6 +55,9 @@ class List(Generic[A]):
         return len(self.xs) == 0
 
     def mk_string(self, sep: str = '') -> str:
+        if self.is_empty():
+            return StringMonoid().zero()
+
         return self.map(lambda x: str(x)) \
             .intersperse(sep) \
             .foldl(StringMonoid())
@@ -143,5 +150,20 @@ class List(Generic[A]):
         """Returns the underlying list"""
         return self.xs
 
+    def diff(self, ys: List[A]) -> List[A]:
+        return List(*set(self.xs).difference(ys.unwrap()))
+
+    def append(self, ys: List[A]) -> List[A]:
+        return List.from_list(self.xs + ys.unwrap())
+
+    def add(self, x: A) -> List[A]:
+        return List.from_list(self.xs + [x])
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, List):
+            return self.xs == other.xs
+        else:
+            return False
+
     def __repr__(self):
-        return f'List({self.xs})'
+        return f"List({self.mk_string(', ')})"
