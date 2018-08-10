@@ -54,6 +54,9 @@ class List(Generic[A]):
     def is_empty(self) -> bool:
         return len(self.xs) == 0
 
+    def non_empty(self) -> bool:
+        return not self.is_empty()
+
     def mk_string(self, sep: str = '') -> str:
         if self.is_empty():
             return StringMonoid().zero()
