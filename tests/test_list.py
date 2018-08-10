@@ -8,6 +8,10 @@ def test_list_is_empty():
     assert List().is_empty()
 
 
+def test_list_non_empty():
+    assert List(1, 2, 3).non_empty()
+
+
 def test_list_map():
     assert List(1, 2, 3).map(lambda x: x + 1) == List(2, 3, 4)
 

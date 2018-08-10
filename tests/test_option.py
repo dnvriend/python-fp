@@ -46,3 +46,11 @@ def test_option_mkstring():
 def test_option_fold():
     assert Option(None) \
                .fold(1, lambda x: x + 1) == 1
+
+
+def test_non_empty():
+    assert not Option.empty().non_empty()
+
+
+def test_assert_non_empty_on_non_empty():
+    assert Option(1).non_empty()

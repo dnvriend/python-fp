@@ -45,6 +45,9 @@ class Option(Generic[A]):
     def is_empty(self) -> bool:
         return self.opt is None
 
+    def non_empty(self) -> bool:
+        return not self.is_empty()
+
     def get_or_else(self, default: A) -> A:
         if self.is_defined():
             return self.opt
