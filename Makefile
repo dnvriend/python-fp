@@ -29,3 +29,6 @@ lint:       ## run python code analysis on rules
 
 lint_test:   ## run python code analysis on test
 	pipenv run pylint tests
+
+dist:      ## create a distribution
+	pipenv run python setup.py bdist_wheel

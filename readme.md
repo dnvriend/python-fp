@@ -68,4 +68,27 @@ $ make fmt
 $ make info
 ```
 
+## Upload to PyPI test
+To upload to test PyPI
+
+```bash
+# upload to test PyPI
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+# install from test PyPI
+pip install -i https://testpypi.python.org/pypi python-fp
+```
+
+## Upload to PyPI
+To upload to PyPI
+
+```bash
+# install to PyPI
+twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+
+install from PyPI
+pip install python-fp 
+```
+
+
 Have fun!

@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+twine = "*"
+setuptools = "*"
 pytest = "*"
 mypy = "*"
 yapf = "*"
 pylint = "*"
-ipython = "*"
 
 [requires]
 python_version = "3.7"
