@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='python-fp',
-    version='0.1',
+    version='0.2',
     author='Dennis Vriend',
     author_email='dnvriend@gmail.com',
     description="Libraries for adding collections and fp concepts to Python",

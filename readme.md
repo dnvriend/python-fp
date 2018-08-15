@@ -86,9 +86,12 @@ To upload to PyPI
 # install to PyPI
 twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
 
-install from PyPI
+# install from PyPI
 pip install python-fp 
 ```
+
+## Resources
+- [Packaging Python Projects](https://packaging.python.org/tutorials/packaging-projects/)
 
 
 Have fun!

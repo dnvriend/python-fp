@@ -84,6 +84,16 @@ class Option(Generic[A]):
         """Returns true of the Option contains a value"""
         return self.opt is not None
 
+    def unwrap(self) -> Optional[A]:
+        """Unwraps the option"""
+        return self.opt
+
+    def exists(self, p: Callable[[A], bool]) -> bool:
+        if self.is_empty():
+            return False
+        else:
+            return p(self.opt)
+
     def __eq__(self, other) -> bool:
         if isinstance(other, Option):
             return self.opt == other.opt

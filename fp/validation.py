@@ -54,18 +54,13 @@ class Validation(Generic[Err, A]):
         return Failure(err)
 
     @classmethod
-    def sequence(cls, xs: List[Validation]) -> Validation[List[Err], List[A]]:
-        """
-        Evaluate each action in the sequence from left to right, and collect the results
-        effectively converting F[G[A]] into an G[F[A]].
-        """
-        err, succ = xs.partition(lambda x: x.is_failure())
-        if err.is_empty():
-            xs = succ.map(lambda x: x.get())
-            return Validation.success(xs)
+    def lift(cls, a: A, f: Callable[[A], bool],
+             fail: Err) -> Validation[Err, A]:
+        """If True then fail, else succeed"""
+        if f(a):
+            return Validation.failure(fail)
         else:
-            xs = err.map(lambda x: x.get())
-            return Validation.failure(xs)
+            return Validation.success(a)
 
     def map(self, f: Callable[[A], C]) -> Validation[C]:
         if self.is_failure():

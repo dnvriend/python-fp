@@ -32,3 +32,9 @@ lint_test:   ## run python code analysis on test
 
 dist:      ## create a distribution
 	pipenv run python setup.py bdist_wheel
+
+clean:
+	rm -rf dist
+
+publish:
+	pipenv run twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
